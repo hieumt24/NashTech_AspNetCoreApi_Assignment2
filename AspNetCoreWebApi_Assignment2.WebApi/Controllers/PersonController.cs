@@ -1,5 +1,6 @@
 ﻿using AspNetCoreWebApi_Assignment2.Application.Interfaces;
-using AspNetCoreWebApi_Assignment2.Application.Models.DTOs;
+using AspNetCoreWebApi_Assignment2.Application.Models.Requests;
+using AspNetCoreWebApi_Assignment2.Application.Models.Responses;
 using AspNetCoreWebApi_Assignment2.Domain.Entities;
 using AspNetCoreWebApi_Assignment2.Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
@@ -18,7 +19,7 @@ namespace AspNetCoreWebApi_Assignment2.WebApi.Controllers
         }
 
         /// <summary>
-        /// Get all list per
+        /// Get all list perons
         /// </summary>
         /// <returns></returns>
         [HttpGet]
@@ -53,18 +54,18 @@ namespace AspNetCoreWebApi_Assignment2.WebApi.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("person")]
-        public IActionResult AddPerson([FromBody] PersonDTO personDto)
+        public IActionResult AddPerson([FromBody] PersonRequest personRequest)
         {
             Person newPerson = new Person
             {
                 Id = Guid.NewGuid(),
-                FirstName = personDto.FirstName,
-                LastName = personDto.LastName,
-                Gender = personDto.Gender,
-                DateOfBirth = personDto.DateOfBirth,
-                PhoneNumber = personDto.PhoneNumber,
-                BirthPlace = personDto.BirthPlace,
-                IsGraduated = personDto.IsGraduated
+                FirstName = personRequest.FirstName,
+                LastName = personRequest.LastName,
+                Gender = personRequest.Gender,
+                DateOfBirth = personRequest.DateOfBirth,
+                PhoneNumber = personRequest.PhoneNumber,
+                BirthPlace = personRequest.BirthPlace,
+                IsGraduated = personRequest.IsGraduated
             };
             if (!ModelState.IsValid)
             {
@@ -75,17 +76,8 @@ namespace AspNetCoreWebApi_Assignment2.WebApi.Controllers
             {
                 return BadRequest("Person already existed");
             }
-            var personUpdateDto = new PersonDTO
-            {
-                FirstName = newPerson.FirstName,
-                LastName = newPerson.LastName,
-                Gender = newPerson.Gender,
-                DateOfBirth = newPerson.DateOfBirth,
-                PhoneNumber = newPerson.PhoneNumber,
-                BirthPlace = newPerson.BirthPlace,
-                IsGraduated = newPerson.IsGraduated
-            };
-            return Ok(personUpdateDto);
+
+            return Ok(new PersonResponse(personAdded));
         }
 
         /// <summary>
@@ -96,18 +88,18 @@ namespace AspNetCoreWebApi_Assignment2.WebApi.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("person/{id}")]
-        public IActionResult UpdatePerson(Guid id, [FromBody] PersonDTO personDto)
+        public IActionResult UpdatePerson(Guid id, [FromBody] PersonRequest personRequest)
         {
             Person person = new Person
             {
                 Id = id,
-                FirstName = personDto.FirstName,
-                LastName = personDto.LastName,
-                Gender = personDto.Gender,
-                DateOfBirth = personDto.DateOfBirth,
-                PhoneNumber = personDto.PhoneNumber,
-                BirthPlace = personDto.BirthPlace,
-                IsGraduated = personDto.IsGraduated
+                FirstName = personRequest.FirstName,
+                LastName = personRequest.LastName,
+                Gender = personRequest.Gender,
+                DateOfBirth = personRequest.DateOfBirth,
+                PhoneNumber = personRequest.PhoneNumber,
+                BirthPlace = personRequest.BirthPlace,
+                IsGraduated = personRequest.IsGraduated
             };
             if (!ModelState.IsValid)
             {
@@ -119,18 +111,7 @@ namespace AspNetCoreWebApi_Assignment2.WebApi.Controllers
                 return BadRequest("No person found with given id");
             }
 
-            var personUpdateDto = new PersonDTO
-            {
-                FirstName = personUpdated.FirstName,
-                LastName = personUpdated.LastName,
-                Gender = personUpdated.Gender,
-                DateOfBirth = personUpdated.DateOfBirth,
-                PhoneNumber = personUpdated.PhoneNumber,
-                BirthPlace = personUpdated.BirthPlace,
-                IsGraduated = personUpdated.IsGraduated
-            };
-
-            return Ok(personUpdateDto);
+            return Ok(new PersonResponse(personUpdated));
         }
 
         /// <summary>

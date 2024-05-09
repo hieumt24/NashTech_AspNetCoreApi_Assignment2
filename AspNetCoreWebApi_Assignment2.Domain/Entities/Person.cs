@@ -11,7 +11,5 @@ namespace AspNetCoreWebApi_Assignment2.Domain.Entities
         /// </summary>
         [Key]
         public Guid Id { get; set; }
-
-       
     }
 }
